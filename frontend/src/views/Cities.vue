@@ -2,8 +2,8 @@
   <div class="home">
     <h2>Les villes</h2>
 
-              <div class="form-group">
             <label for="country">Trier Par Pays:</label>
+              <div class="form-group" id="selectorDiv">
             <select id="countrySelector" class="form-control" v-model="data.editedCity.country" @change="orderByCountry()">
               <option disabled value="0">Choisissez un pays</option>
               <option
@@ -14,6 +14,12 @@
                 {{ country.name }}
               </option>
             </select>
+            <button
+              class="btn btn-sm btn-outline-danger"
+              @click="resetSelector()"
+            >
+              X
+            </button>
           </div>
           <br>
 
@@ -39,6 +45,11 @@ const data = reactive({
   editedCity: { ...emptyCity },
 });
 
+function resetSelector(){
+    document.getElementById("countrySelector").selectedIndex = 0;
+    fetchCities();
+}
+
 function orderByCountry(){
     let selectedCountryId = document.getElementById('countrySelector').value;
   fetch("api/citiesByCountry?id=" + selectedCountryId)
@@ -50,14 +61,28 @@ function orderByCountry(){
 }
 
 function fetchCities() {
-  // Utilise l'API ad-hoc pour avoir le pays de chaque ville
-  fetch("api/allCities")
-    .then((response) => response.json())
-    .then((json) => {
-        console.log(json);
-      data.allCities = json;
+
+    console.log(document.getElementById("countrySelector").value);
+
+    if ( document.getElementById("countrySelector").value == 0 ) {
+        
+        // Utilise l'API ad-hoc pour avoir le pays de chaque ville
+        fetch("api/allCities")
+            .then((response) => response.json())
+            .then((json) => {
+                console.log(json);
+            data.allCities = json;
+
+            })
+                .then((json) => {
+        document.getElementById("countrySelector").value = 0;
     })
-    .catch((error) => alert(error));
+            .catch((error) => alert(error));
+
+    } else {
+        orderByCountry();
+    }
+
 }
 
 // Utilise l'API REST auto-générée pour avoir les pays
@@ -105,3 +130,11 @@ onMounted(() => {
   fetchCountries(); // On récupère les pays (pour le sélecteur de pays)
 });
 </script>
+
+
+<style>
+
+#selectorDiv{
+    display: flex;
+}
+</style>
