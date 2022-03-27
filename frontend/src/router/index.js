@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/views/Home.vue";
 import Countries from "@/views/Countries.vue";
+import Cities from "@/views/Cities.vue";
 import CountryEdit from "@/views/CountryEdit.vue";
 import CityEdit from "@/views/CityEdit.vue";
 
@@ -14,6 +15,11 @@ const routes = [
     path: "/countries",
     name: "Countries",
     component: Countries,
+  },
+  {
+    path: "/cities",
+    name: "Cities",
+    component: Cities,
   },
   {
     path: "/cityEdit",

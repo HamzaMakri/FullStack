@@ -3,6 +3,7 @@
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/countries">Les pays</router-link> |
+      <router-link to="/cities">Les villes</router-link> |
       <router-link to="/countryEdit">Edition pays</router-link> |
       <router-link to="/cityEdit">Edition villes</router-link> |
       <router-link to="/about">About</router-link> |

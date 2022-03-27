@@ -84,6 +84,13 @@ public class RestController {
 		return cityDao.findAll();
 	}
 
+	@GetMapping(path = "citiesByCountry")
+	public @ResponseBody List<City> citiesByCountry(@RequestParam String id) {
+		log.info(id);
+		log.info("Renvoie la liste des villes dans le pays");
+		return cityDao.findByCountryId(id);
+	}
+
 	@GetMapping(path = "allCountries") 
 	public @ResponseBody List<Country> allCountries() {
 		log.info("Renvoie la liste des pays");

@@ -1,48 +1,23 @@
 <template>
   <div class="home">
-    <h2>Edition des villes</h2>
-    <div class="row">
-      <div class="col">
-        <form @submit.prevent="saveCity">
-          <div class="form-group">
-            <label for="country">Pays:</label>
-            <select class="form-control" v-model="data.editedCity.country">
+    <h2>Les villes</h2>
+
+              <div class="form-group">
+            <label for="country">Trier Par Pays:</label>
+            <select id="countrySelector" class="form-control" v-model="data.editedCity.country" @change="orderByCountry()">
               <option disabled value="0">Choisissez un pays</option>
               <option
                 v-for="country in data.allCountries"
                 :key="country.id"
-                :value="country._links.self.href"
+                :value="country.id"
               >
                 {{ country.name }}
               </option>
             </select>
           </div>
-          <div class="mb-3 mt-3">
-            <label for="name" class="form-label">Nom:</label>
-            <input class="form-control" v-model="data.editedCity.name" />
-          </div>
-          <div class="mb-3">
-            <label for="population" class="form-label">Population:</label>
-            <input
-              class="form-control"
-              v-model="data.editedCity.population"
-              type="number"
-            />
-          </div>
-          <button
-            type="submit"
-            class="btn btn-primary"
-            :disabled="data.editedCity.country == 0"
-          >
-            Ajouter une ville
-          </button>
-        </form>
-      </div>
-      <div class="col">
-        <city-list v-bind:cities="data.allCities"
-        @refresh="fetchCities()" />
-      </div>
-    </div>
+          <br>
+
+    <city-list v-bind:cities="data.allCities" @refresh="fetchCities()" />
   </div>
 </template>
 
@@ -64,11 +39,22 @@ const data = reactive({
   editedCity: { ...emptyCity },
 });
 
+function orderByCountry(){
+    let selectedCountryId = document.getElementById('countrySelector').value;
+  fetch("api/citiesByCountry?id=" + selectedCountryId)
+    .then((response) => response.json())
+    .then((json) => {
+      data.allCities = json
+    })
+    .catch((error) => alert(error));
+}
+
 function fetchCities() {
   // Utilise l'API ad-hoc pour avoir le pays de chaque ville
   fetch("api/allCities")
     .then((response) => response.json())
     .then((json) => {
+        console.log(json);
       data.allCities = json;
     })
     .catch((error) => alert(error));
